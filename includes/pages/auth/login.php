@@ -7,7 +7,7 @@
 <main>
     <div class="container">
         <div class="row mt-5">
-            <div class="col-lg-4">
+            <div class="col-lg-4 mx-auto">
                 <div id="login_response_message"></div>
                 <form action="#" id="login_form">
                     <div class="mb-2">
@@ -16,7 +16,7 @@
                         <div id="email_error"></div>
                     </div>
                     <div class="mb-2">
-                        <label for="password" class="mb-2">Password</label>
+                        <label for="password" class="mb-2">Passwod</label>
                         <input type="password" name="password" id="password" class="form-control mb-2">
                         <div id="password_error"></div>
                     </div>
