@@ -22,7 +22,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
               echo json_encode($getOneLinkFullRow($id));
            }
         } catch (PDOException $th) {
-            echo json_encode($th->getMessage());
+            echo json_encode("Something wrong was happend with the service");
             http_response_code(500);
         }
     }
