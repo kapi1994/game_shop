@@ -2,6 +2,8 @@
 header("Content-type:application/json");
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
     $name = $_POST['name'];
+    $link = $_POST['link_active'];
+    
 
     include '../validations.php';
     include '../functions.php';
@@ -18,13 +20,15 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
             }else{
                 insertNewLink($name);
                 echo json_encode([
-                    'links' => $getAllLinks,
+                    'data' => getAllLinks($link),
+                    'pages' => linkPagination(),
+                    'activePage' => $link,
                     'message' => 'New link has been created'
                 ]);
                 http_response_code(201);
             }
         } catch (PDOException $th) {
-            echo json_encode($th->getMessage());
+            echo json_encode("Something wrong was happend with the service");
             http_response_code(500);
         }
     }
