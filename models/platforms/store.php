@@ -2,6 +2,8 @@
 header("Conent-type:application/json");
 if($_SERVER["REQUEST_METHOD"] == "POST"){
     $name = $_POST['name'];
+    $limit = $_POST['link_active'];
+    
     include '../validations.php';
     include '../functions.php';
     $platformValidation = platformFormValidation($name);
@@ -16,7 +18,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             }else{
                 insertNewPlatform($name);
                 echo json_encode([
-                    'data' => getAllPlatforms(),
+                    'data' => getAllPlatforms($limit),
+                    'pages' => platformPagination(),
+                    'activeLink' => $limit,
                     'message' => "New platform has been inserted"
                 ]);
                 http_response_code(201);
