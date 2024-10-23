@@ -41,7 +41,7 @@ $pagination = linkPagination();
                 <nav aria-label="Page navigation example">
                         <ul class="pagination" id="link-pagination">
                             <?php for($i = 0; $i< $pagination   ; $i++):?>
-                                <li class="page-item page <?=$i == 0 ? 'active' : ''?>"><a class="page-link" href="#" data-limit="<?=$i?>"><?=$i+1?></a></li>
+                                <li class="page-item page <?=$i == 0 ? 'active' : ''?>"><a class="page-link pagination-links" href="#" data-limit="<?=$i?>"><?=$i+1?></a></li>
                             <?php endfor?>
                         </ul>
                 </nav>
