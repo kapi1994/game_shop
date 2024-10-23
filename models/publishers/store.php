@@ -2,6 +2,7 @@
 header("Content-type:application/json");
 if($_SERVER["REQUEST_METHOD"] === "POST"){
     $name = $_POST['name'];
+    $active_page = $_POST['link_active'];
 
     include '../validations.php';
     include '../functions.php';
@@ -19,7 +20,9 @@ if($_SERVER["REQUEST_METHOD"] === "POST"){
             }else{
                 insertNewPublisher($name);
                 echo json_encode([
-                    'data' => getAllPublishers(),
+                    'data' => getAllPublishers($active_page),
+                    'pages' => publisherPagination(),
+                    'activeLink' => $active_page,
                     'message' => 'New publisher has been created'
                 ]);
                 http_response_code(201);
@@ -29,4 +32,5 @@ if($_SERVER["REQUEST_METHOD"] === "POST"){
             http_response_code(500);
         }
     }
-}
+    
+}else http_response_code(404);
