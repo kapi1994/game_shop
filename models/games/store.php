@@ -6,12 +6,14 @@ if($_SERVER["REQUEST_METHOD"] === "POST"){
     $publisher = $_POST['publisher'];
     $genres = explode(",", $_POST['genres']);
     $trailer_url = $_POST['trailer'];
+    $published_at = $_POST['published_at'];
+    $pegi_rating = $_POST['pegi_rating'];
 
 
     include '../validations.php';
     include '../functions.php';
 
-    $gameFormValidation = gameFormValidation($name, $description, $publisher, $genres, $trailer_url);
+    $gameFormValidation = gameFormValidation($name, $description, $publisher,$pegi_rating, $published_at, $genres, $trailer_url);
     if(count($gameFormValidation) > 0)
         printErrors($gameFormValidation);
     else{
@@ -22,7 +24,7 @@ if($_SERVER["REQUEST_METHOD"] === "POST"){
                 echo json_encode("Game with this name is allready taken");
                 http_response_code(409);
             }else{
-                insertGame($name, $description, $publisher, $genres, $trailer_url);
+                insertGame($name, $description, $publisher, $pegi_rating, $published_at, $genres, $trailer_url);
                 echo json_encode([
                     'data' => getAllGames(),
                     'message' => "New game has been inserted"
