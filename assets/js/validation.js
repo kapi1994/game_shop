@@ -95,11 +95,12 @@ const gamesFormValidation = (data,errors) => {
 
 const gameEditionFormValidation = (data, errors) => {
 
-    const {game_id, edition_id, edition_index, platforms, price, cover}  = data
+    const {game_id, edition_id, edition_index, platforms, price, edition, cover}  = data
     const rePrice = /^[\d]{1,5}$/
     
     inputFormValidation(price, rePrice, "price_error", "Price isn't valid", errors)
     selectFormValidation(platforms, "platform_error", "Choose platform", errors)
+    selectFormValidation(edition, "edition_error", "Choose edition", errors)
     if(edition_id === ""){
         inputFileFormValidation(cover, "cover_error", ["Choose a file", "Type of the file isn't good", "File size must be lower than 3mb"], errors)
     }else if(cover.size > 0){
