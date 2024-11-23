@@ -34,7 +34,9 @@ const sendGetRequest = (url, responseMessage, sendData = "") => {
            }
         }
     })
-    .catch(err => console.log(err))
+    .catch(error => {
+        createResponseMessage(error.status, "Something gone wrong with the service! Try agian later.", responseMessage)
+    })
         //  console.log(err.message, err.status))
 }
 const sendData = (url, responseMessage, sendData) => {
