@@ -86,9 +86,10 @@ const fillActionForm = (data) => {
    let values = Object.values(data)
   
    keys.forEach((key, index) => {
-       let element = document.querySelectorAll(`input[name="${key}"]`)
-       if(element.length > 0){
-        
+      
+       
+       if(document.querySelectorAll(`input[name="${key}"]`).length > 0){
+        let element = document.querySelectorAll(`input[name="${key}"]`)
             if(element.length > 1){
                 let allElements = document.querySelectorAll(`input[name="${key}"]`)
                 let dataValues = values[index]
@@ -102,7 +103,6 @@ const fillActionForm = (data) => {
                    
                 })
             }else{
-                console.log(key)
                  if(key === 'cover'){
                     let image = document.querySelector('#img_preview')
                     image.classList.remove('d-none')
@@ -119,6 +119,13 @@ const fillActionForm = (data) => {
                 }
             
             }
+       }else{
+            const selectElements = document.querySelectorAll('select')
+            selectElements.forEach((select, index) => {
+                if(select.id === key){
+                    select.value = values[index]
+                }
+            })
        }
    })
 }
