@@ -43,8 +43,6 @@ const sendData = (url, responseMessage, sendData) => {
     const urlSplit = url.split("/")
     const action = urlSplit[urlSplit.length-1].split(".")[0]
     const entity = urlSplit[1]
-    const index = `${urlSplit[1].slice(0,-1)}_index`
-    console.log(sendData)
   
     axios.post(url, sendData, {
         headers:{
@@ -52,7 +50,6 @@ const sendData = (url, responseMessage, sendData) => {
         }
     })
         .then(data => {
-            if(data.status > 200 || data.status < 300){
                 if(action === 'delete'){
                     replaceAfterDelete(data.data, sendData.index, urlSplit[1].slice(0,-1))
                 }else if(action === 'store'){
@@ -68,7 +65,7 @@ const sendData = (url, responseMessage, sendData) => {
                     delete sendData.link_active
                     const index = `${urlSplit[1].slice(0,-1)}_index`
                     const objectIndex = sendData[index]
-                    printRow(data.data, objectIndex, urlSplit[1], 'row')
+                    printRow(data.data, Number(objectIndex), urlSplit[1], 'row')
                     clearActionForm(Object.keys(sendData), urlSplit[1].slice(0,-1))     
                     
                 }else if(action === 'register'){
@@ -76,10 +73,10 @@ const sendData = (url, responseMessage, sendData) => {
                 }else if(action === 'login'){
                     data === 2 ? window.location.href = 'index.php' : window.location.href = 'admin.php'
                 }
-            }
+            
         })
         .catch(err => {
-            createResponseMessage(err.stauts, "Something gone wrong with the service", responseMessage)
+            createResponseMessage(err.status, err.response.data, responseMessage)
         })
 
 }
