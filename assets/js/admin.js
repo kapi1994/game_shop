@@ -14,7 +14,6 @@ block ? block.addEventListener('click', (e) => {
     let responseMessage = `${entity}_response_message`
     
 
-
     if(element.matches("table tbody td button.btn-success")){
         sendGetRequest(url, responseMessage, element.dataset)
     }else if(element.matches("table tbody td button.btn-danger")){
@@ -30,6 +29,11 @@ block ? block.addEventListener('click', (e) => {
          const gernesArray = []
          const genres = document.querySelectorAll('input[name="genres"]:checked')
          formData.append('genres', getValuesFromCheckBoxesArray(genres, gernesArray))
+       }
+       else if(entity === 'edition'){
+        const old_img_cover = document.querySelector('#cover-img').src.split('/')
+        const name_old_img_cover = old_img_cover[old_img_cover.length - 1]
+        formData.append('old_img_cover',  name_old_img_cover)
        }
       
        const data = Object.fromEntries(formData)
