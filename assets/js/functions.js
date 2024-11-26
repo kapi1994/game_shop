@@ -1,8 +1,7 @@
 const sendGetRequest = (url, responseMessage, sendData = "") => {
     const action = url.split("/")
     const file = action[action.length - 1].split(".")[0]
-    
-    console.log(action)
+    const entity = action[1]
 
     axios.get(url, {
         params:sendData !== "" ? sendData : ""
@@ -19,7 +18,7 @@ const sendGetRequest = (url, responseMessage, sendData = "") => {
                delete objData.id
 
                
-               fillActionForm(objData)
+               fillActionForm(objData, entity)
            }else if(file === 'pagination'){
                 let splitedClasses = url.split("/")
                 let paginationClassSplit = splitedClasses[splitedClasses.length - 1].split(".")
@@ -65,7 +64,7 @@ const sendData = (url, responseMessage, sendData) => {
                     delete sendData.link_active
                     const index = `${urlSplit[1].slice(0,-1)}_index`
                     const objectIndex = sendData[index]
-                    printRow(data.data, Number(objectIndex), urlSplit[1], 'row')
+                    printRow(data.data, Number(objectIndex) + 1, urlSplit[1], 'row')
                     clearActionForm(Object.keys(sendData), urlSplit[1].slice(0,-1))     
                     
                 }else if(action === 'register'){
@@ -80,53 +79,37 @@ const sendData = (url, responseMessage, sendData) => {
         })
 
 }
-const fillActionForm = (data) => {
+const fillActionForm = (data, entity) => {
 
    let keys = Object.keys(data)
    let values = Object.values(data)
-  
    keys.forEach((key, index) => {
-      
-       
-       if(document.querySelectorAll(`input[name="${key}"]`).length > 0){
-        let element = document.querySelectorAll(`input[name="${key}"]`)
-            if(element.length > 1){
-                let allElements = document.querySelectorAll(`input[name="${key}"]`)
-                let dataValues = values[index]
-                allElements.forEach(singleEl => {
-                   document.querySelector(`#${singleEl.id}`).removeAttribute('checked')
-                   let valueSingleEl = parseInt(singleEl.value)
-                   dataValues.forEach(dataValue => {
-                     let value = parseInt(dataValue)
-                     valueSingleEl === value ? document.querySelector(`#${singleEl.id}`).setAttribute('checked', true) : ''
-                   })
-                   
-                })
-            }else{
-                 if(key === 'cover'){
-                    let image = document.querySelector('#img_preview')
-                    image.classList.remove('d-none')
-                    let cover = document.querySelector('#cover-img')
-                    cover.src = `assets/img/normal/${values[index]}`
-                    
-                }else if(key === 'trailer'){
-                    document.querySelector(`#${key}`).value = ''
-                    let player = document.querySelector('#trailer_video')
-                    player.src = `https://www.youtube.com/embed/${values[index]}`
-                    player.parentNode.classList.remove('d-none')
-                }else {
-                    document.querySelector(`#${key}`).value = values[index]
-                }
-            
-            }
-       }else{
-            const selectElements = document.querySelectorAll('select')
-            selectElements.forEach((select, index) => {
-                if(select.id === key){
-                    select.value = values[index]
-                }
-            })
-       }
+     let elements = document.getElementsByName(`${key}`)
+     const valuesData = values[index]
+     if(elements.length > 1){
+        elements.forEach(element => {
+            document.querySelector(`#${element.id}`).removeAttribute('checked')
+            valuesData.includes(Number(element.value)) ? document.querySelector(`#${element.id}`).setAttribute('checked', true) : ''
+        })
+     }else{
+         if(key === 'cover'){
+            const img_cover = document.querySelector(`#${key}-img`)
+            img_cover.src = `assets/img/normal/${values[index]}`
+            img_cover.parentNode.classList.remove('d-none')
+         }else if(key === 'trailer'){
+            console.log(key)
+            const trailer = document.querySelector(`#${key}`)
+            trailer.value = `https://www.youtube.com/watch?v=${values[index]}`
+
+            const trailer_player = document.querySelector(`#${key}_video`)
+            trailer_player.src = `https://www.youtube.com/embed/${values[index]}`
+            trailer_player.parentNode.classList.remove("d-none")
+           
+         }else{
+            document.querySelector(`#${key}`).value = values[index]
+            console.log(document.querySelector(`#${key}`))
+         }
+     }
    })
 }
 const clearActionForm = (objectData, entity) => {
@@ -140,15 +123,15 @@ const clearActionForm = (objectData, entity) => {
             })
             
         }else {
-            
-            let element = document.querySelector(`#${objData}`)
-            element.value = ''
-            element.removeAttribute('value')
-            if(entity === 'game'){
-                const player = document.querySelector('#trailer_video')
-                player.src = '#'
-                player.parentNode.classList.add('d-none')
-            }
+          let element = document.querySelector(`#${objData}`)
+          element.value = ''
+          element.removeAttribute('value')
+          if(entity === "edition"){
+           const img_cover = document.querySelector('#cover-img')
+           const img_preview = document.querySelector('#img_preview')
+           img_cover.src = '#'
+           img_preview.classList.add('d-none')
+          }
         }
     })
 }
@@ -184,7 +167,6 @@ const printAllRows = (data, entity, limit = 0) => {
     document.querySelector(`#${entity}`).innerHTML = content
 }
 const printRow = (data, index, entity = '', operation = '') => {
-    console.log(entity)
     let content = ` 
     <tr id="link_${index}">
         <th scope="row">${index}</th>`
@@ -202,6 +184,7 @@ const printRow = (data, index, entity = '', operation = '') => {
     else if(entity.slice(0,-1) === 'edition'){
        content+=`<td>${data.platformName}</td>
         <td>${data.editionName}</td>
+        <td>${data.price}</td>
        `
     }else{
        content+=` <td>${data.name}</td>`
@@ -214,7 +197,7 @@ const printRow = (data, index, entity = '', operation = '') => {
         </button></td>
     </tr>`
     if(operation === "row"){
-      const whereToPlace = `${entity.slice(0,-1)}_${index}`
+      const whereToPlace = entity.slice(0,-1)+"_"+(index-1)
       document.querySelector(`#${whereToPlace}`).innerHTML = content
     }
 
