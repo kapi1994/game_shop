@@ -39,7 +39,7 @@ block ? block.addEventListener('click', (e) => {
        const data = Object.fromEntries(formData)
        formValidation(data, entity).length === 0 ? sendData(url, responseMessage, data) : ""
     }else if(element.matches("form button.btn-danger")){
-       clearActionForm(Object.keys(Object.fromEntries(new FormData(document.querySelector(`#${entity}_form`)))))
+       clearActionForm(Object.keys(Object.fromEntries(new FormData(document.querySelector(`#${entity}_form`)))), entity)
     }else if(element.matches("ul.pagination li a")){
         entity = lastClass.split("-")[1]
         action = lastClass.split("-")[0]
