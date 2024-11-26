@@ -25,21 +25,16 @@ if($_SERVER["REQUEST_METHOD"] === "POST"){
                 echo json_encode("Game with that edition and on the that platfrom allready exists");
                 http_response_code(409);
             }else{
-                try {
-                    require_once '../../config/connection.php';
-                    $image_name = "";
-                    if($image !== ""){
-                        $image_name = uploadImage($image);
-                        removeOldImage($old_img_cover);
-                    }else{
-                        updateGameEdition($id, $game_id, $platform, $edition, $price, $image_name);
-                        echo json_encode(getGameEditionFullRow($id));
-                    }
-                } catch (PDOException $th) {
-                    echo json_encode($th->getMessage());
-                    http_response_code(500);
-                }
+               $image_name = "";
+               if($image!=""){
+                    $image_name =  uploadImage($image);
+                    removeOldImage($image_name);
+               }
+               updateGameEdition($id, $platform, $edition, $price, $image_name);
+               echo json_encode(getGameEditionFullRow(edition_id: $id));
+               
             }
+               
         } catch (PDOException $th) {
             echo json_encode($th->getMessage());
             http_response_code(500);
